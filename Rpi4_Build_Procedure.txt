@@ -1,0 +1,35 @@
+Build Commands: -
+================
+
+	Step I. Go to synced kernel source
+	
+		cd linux
+		KERNEL=kernel8
+		
+		make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig		
+		make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs		
+		make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- INSTALL_MOD_PATH=<my_path> modules_install
+	
+	Step II.  Access EMMC boot partition using rpiboot. Short J2 jumper (extreme right, vertical 2 pins)
+		
+		Run "rpiboot" executable and you will see drive appearing on PC.		
+		Mount drive on Linux Machine.		
+		
+	III. Copy directly to boot partition
+		sudo mount /dev/sdb1 /mnt
+	
+	cp arch/arm64/boot/Image /mnt/$KERNEL.img
+  cp arch/arm64/boot/dts/broadcom/*.dtb /mnt/
+  cp arch/arm64/boot/dts/overlays/*.dtb* /mnt/overlays/
+  cp arch/arm64/boot/dts/overlays/README /mnt/overlays/
+	
+	
+	IV. Installing modules
+	
+	mount /dev/sdb2 /mnt/
+	make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- INSTALL_MOD_PATH= /mnt/ modules_install
+	
+References: -
+--------------
+VVI URL: https://www.raspberrypi.com/documentation/computers/linux_kernel.html
+	
